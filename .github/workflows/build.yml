@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checking out"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Checkout submodules
         run: git submodule update --init --recursive
 
@@ -82,3 +82,4 @@ jobs:
           base: "soi_4.2.x"
           title: "new client build"
           body: "Automated client build from GeoNode Client CI"
+          delete-branch: true
