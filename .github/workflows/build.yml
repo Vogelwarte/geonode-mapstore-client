@@ -77,9 +77,8 @@ jobs:
 
         
       - name: "Create Pull Request"
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ steps.generate-token.outputs.token }}
           base: "soi_4.2.x"
           title: "new client build"
           body: "Automated client build from GeoNode Client CI"
