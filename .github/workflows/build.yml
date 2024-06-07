@@ -7,9 +7,9 @@ concurrency:
   cancel-in-progress: true
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push events but only for the master branch
+  # Triggers the workflow on push events but only for the soi_4.2.x branch
   push:
-    branches: [ master ]
+    branches: [ soi_4.2.x ]
     paths: 
       - "VERSION"
       - "geonode_mapstore_client/client/**"
@@ -17,6 +17,11 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+permissions: 
+  # extent TOKEN's permissions
+  pull-requests: write
+  contents: write
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checking out"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Checkout submodules
         run: git submodule update --init --recursive
 
@@ -70,17 +75,12 @@ jobs:
       - name: "Stage files"
         run: git add --all
         
-      - name: "Generate temp GitHub token"
-        uses: tibdex/github-app-token@v1
-        id: generate-token
-        with:
-          app_id: ${{ secrets.TOKEN_APP_ID }}
-          private_key: ${{ secrets.TOKEN_APP_PRIVATE_KEY }}
+
         
       - name: "Create Pull Request"
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ steps.generate-token.outputs.token }}
-          base: "master"
+          base: "soi_4.2.x"
           title: "new client build"
           body: "Automated client build from GeoNode Client CI"
+          delete-branch: true

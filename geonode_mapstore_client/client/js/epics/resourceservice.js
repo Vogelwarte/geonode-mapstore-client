@@ -105,7 +105,7 @@ export const gnDownloadResource = (action$) =>
             const resource = action?.resource;
             return Observable.defer(() => downloadResource(resource)
                 .then(({ output, headers }) => {
-                    saveAs(new Blob([output], { type: headers?.['content-type'] }), resource.title);
+                    saveAs(new Blob([output], { type: headers?.['content-type'] }), headers?.['content-type'] == 'application/geopackage+sqlite3' ? `${resource.title}.gpkg`: resource.title);
                     return { resource };
                 })
                 .catch((error) => ({ resource, error: error?.data?.detail || error?.statusText || error?.message || true }))
