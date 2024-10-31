@@ -252,6 +252,7 @@ def run_setup_hooks(*args, **kwargs):
     settings.PROXY_ALLOWED_PARAMS_NEEDLES += (
         "request=getfeatureinfo",
         "request=getcapabilities",
+        "request=getmap",
     )
     settings.PROXY_ALLOWED_PATH_NEEDLES += (
         "tileset.json",
@@ -267,6 +268,19 @@ def run_setup_hooks(*args, **kwargs):
         "i3dm",
         "pnts",
     )
+
+    GEONODE_CATALOGUE_SERVICE = getattr(settings, "GEONODE_CATALOGUE_SERVICE", None)
+    MAPSTORE_DASHBOARD_CATALOGUE_SERVICES = {}
+    MAPSTORE_DASHBOARD_CATALOGUE_SELECTED_SERVICE = ""
+
+    if GEONODE_CATALOGUE_SERVICE:
+        MAPSTORE_DASHBOARD_CATALOGUE_SERVICES[list(list(GEONODE_CATALOGUE_SERVICE.keys()))[0]] = GEONODE_CATALOGUE_SERVICE[
+            list(list(GEONODE_CATALOGUE_SERVICE.keys()))[0]
+        ]  # noqa
+        MAPSTORE_DASHBOARD_CATALOGUE_SELECTED_SERVICE = list(list(GEONODE_CATALOGUE_SERVICE.keys()))[0]
+
+    setattr(settings, "MAPSTORE_DASHBOARD_CATALOGUE_SELECTED_SERVICE", MAPSTORE_DASHBOARD_CATALOGUE_SELECTED_SERVICE)
+    setattr(settings, "MAPSTORE_DASHBOARD_CATALOGUE_SERVICES", MAPSTORE_DASHBOARD_CATALOGUE_SERVICES)
 
 
 def connect_geoserver_style_visual_mode_signal():
